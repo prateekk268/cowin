@@ -33,11 +33,11 @@ const getHospitals = async function (req, res) {
         if (!date) return res.status(400).send({ code: 500, message: 'Date is required' });
         if (dateChecker(date) === false) return res.send({ code: 500, message: "please provide date in valid string format" })
 
-        if (!limit) {
-            limit = 10;
-        } else {
+        if (limit) {
             if (!check(limit)) return res.status(400).send({ code: 500, message: `Must be non negative number` })
-        }
+        } 
+            
+        
 
 
         const option = {
@@ -48,9 +48,10 @@ const getHospitals = async function (req, res) {
         let info = await axios(option);
         let result = []
         let arr = info.data["centers"];
-        console.log(arr);
+        limit = req.body.limit || 10;
+        console.log(limit);
 
-        for (let i = 0; i <= limit; i++) {
+        for (let i = 0; i < limit; i++) {
             let obj = {
                 "name": arr[i].name,
                 "sessions": []
